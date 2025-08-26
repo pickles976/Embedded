@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KittyCam</title>
+</head>
+ 
+<body>
+    <label for="ip">Server Local IP:</label>
+    <input type="text" id="ip" name="ip"><br><br>
+    <button onclick="contactServer()">Connect</button><br><br>
+    <img id="ItemPreview" src="">
+<!-- 
+    <img width="800" height="800" src="http://172.20.1.41:8080/cam.mjpg"/> -->
+</body>
+ 
+<script>
+
+    console.log("Starting")
+
+    // Connect
+    let socket = {};
+
+    const showChanged = () => {
+        console.log("New frame received!")
+    }
+
+    const contactServer = () => {
+    
+        let ip = document.getElementById("ip").value
+
+        console.log(`Connecting websocket server at IP: ${ip}`)
+
+        socket = new WebSocket(`ws://${ip}:8000`)
+
+        socket.addEventListener('open', function (event) {
+            socket.send('Connection Established')
+        })
+
+        // Load image
+        socket.addEventListener('message', function (event) {
+            console.log(event.data);
+            document.getElementById("ItemPreview").src = URL.createObjectURL(event.data);
+        })
+    
+    }
+</script>
+</html>

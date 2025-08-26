@@ -1,0 +1,17 @@
+{
+    "0": { "translation" : [0,0,1], "rotation" : [0,0,0] },
+    "1": { "translation" : [0,1,1], "rotation" : [0,0,0] },
+    "2": { "translation" : [0,0.5,0.75], "rotation" : [0,0,0] },
+
+    "3": { "translation" : [7,12.66,0.66], "rotation" : [0,0,90] },
+    "4": { "translation" : [7,12.66,1], "rotation" : [0,0,90] },
+    "5": { "translation" : [7,12.77,1.33], "rotation" : [0,0,90] },
+    
+    "6": { "translation" : [0,-7,1], "rotation" : [0,0,0] },
+    "7": { "translation" : [0,-7.5,1], "rotation" : [0,0,0] },
+    "8": { "translation" : [0,-7,1.5], "rotation" : [0,0,0] },
+    
+    "9": { "translation" : [5.833,-11.791,1], "rotation" : [0,0,-90] },
+    "10": { "translation" : [5.833,-11.791,1.5], "rotation" : [0,0,-90] },
+    "11": { "translation" : [5.833,-11.791,0.66], "rotation" : [0,0,-90] }
+}

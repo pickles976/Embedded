@@ -1,0 +1,6 @@
+<launch>
+        <!-- Publish controller inputs -->
+        <node pkg="robot" type="driver.py" name="robot_driver"></node>
+        <!-- Detect fiducials and estimate a pose -->
+        <node pkg="robot" type="vision_compressed.py" name="robot_cameras"></node>
+</launch>

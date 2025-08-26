@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Raspberry Pi Camera Stream</title>
+</head>
+<body>
+    <h1>Camera</h1>
+    <img src="/video_feed">
+    <div>
+        <button id="leftButton">Left</button>
+        <button id="rightButton">Right</button>
+        <button id="upButton">Up</button>
+        <button id="downButton">Down</button>
+    </div>
+</body>
+
+<script>
+    const leftButton = document.getElementById('leftButton');
+    const rightButton = document.getElementById('rightButton');
+    const upButton = document.getElementById('upButton');
+    const downButton = document.getElementById('downButton');
+
+    leftButton.addEventListener('click', async () => {
+        fetch('/move/LEFT').catch(error => {
+            console.error('Error during fetch:', error);
+        });
+    });
+
+    rightButton.addEventListener('click', async () => {
+        fetch('/move/RIGHT').catch(error => {
+            console.error('Error during fetch:', error);
+        });
+    });
+
+    upButton.addEventListener('click', async () => {
+        fetch('/move/UP').catch(error => {
+            console.error('Error during fetch:', error);
+        });
+    });
+
+    downButton.addEventListener('click', async () => {
+        fetch('/move/DOWN').catch(error => {
+            console.error('Error during fetch:', error);
+        });
+    });
+
+</script>
+
+</html>

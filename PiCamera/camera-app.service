@@ -1,0 +1,14 @@
+[Unit]
+Description=Flask App with GPIO and PiCamera
+After=network.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/
+ExecStart=/usr/bin/python3 /home/pi/server.py
+Restart=always
+Environment=FLASK_ENV=production
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
