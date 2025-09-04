@@ -26,7 +26,19 @@
         (write-byte PWR_MGMT str)
         (write-byte #x00 str)))
 
-(defun read-sensor-raw (register)
+(defun bytes-to-signed (hi lo) ; -> int
+  (let ((val (logior (ash hi 8) lo)))
+    (if (>= val 32768)
+        (- val 65536)
+        val))) 
+
+(defun bytes-to-integers-signed (byte-list) ; -> list[int]
+  (if (or (null byte-list) (null (cdr byte-list)))
+      '()
+      (cons (bytes-to-signed (car byte-list) (cadr byte-list))
+            (bytes-to-integers-signed (cddr byte-list)))))
+
+(defun read-imu-raw (register)
     (set-i2c-register MPU_6050 register)
     (with-i2c (str MPU_6050 6) ; read 6 bytes from MPU
         (list
@@ -37,32 +49,17 @@
             (read-byte str) ; Z hi
             (read-byte str)))) ; Z lo 
 
-(defun bytes-to-signed (hi lo)
-  (let ((val (logior (ash hi 8) lo)))
-    (if (>= val 32768)
-        (- val 65536)
-        val))) 
-
-(defun bytes-to-integers-signed (byte-list)
-  (if (or (null byte-list) (null (cdr byte-list)))
-      '()
-      (cons (bytes-to-signed (car byte-list) (cadr byte-list))
-            (bytes-to-integers-signed (cddr byte-list)))))
-
-(defun read-offsets ()
+; Read a 6 bytes of EEPROM memory starting at the specified register
+(defun read-imu (scale register) ; -> (float, float, float)
     (mapcar
-        (lambda (entry) (/ entry ACCEL_SCALE)) 
-        (bytes-to-integers-signed (read-sensor-raw ACCEL_OFFSET_REGISTER))))
+        (lambda (entry) (/ entry scale)) ; divide by the scale
+        (bytes-to-integers-signed (read-sensor-raw register)))) ; read bytes and convert to signed integers
 
-(defun read-accel ()
-    (mapcar
-        (lambda (entry) (/ entry ACCEL_SCALE)) 
-        (bytes-to-integers-signed (read-sensor-raw ACCEL_REGISTER))))
+(defun read-accel () ; -> (float, float, float)
+    (read-imu ACCEL_SCALE ACCEL_REGISTER))
 
-(defun read-gyro ()
-    (mapcar
-        (lambda (entry) (/ entry GYRO_SCALE)) 
-        (bytes-to-integers-signed (read-sensor-raw GYRO_REGISTER))))
+(defun read-gyro () ; -> (float, float, float)
+    (read-imu GYRO_SCALE GYRO_REGISTER))
 
 (defun get-x (items) (car items))
 (defun get-y (items) (cadr items))
@@ -74,7 +71,6 @@
 (defun main () 
     (wake-up-mpu)
     (loop
-        ;; (print (read-accel))
         (let ((accel (read-accel)))
             (print (angle (get-y accel) (get-z accel))))
         (delay 1000)))
