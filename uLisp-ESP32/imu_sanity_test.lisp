@@ -1,10 +1,4 @@
 ; Comment to disable echo
-(defun scan () 
-  (dotimes (p 127)
-    (with-i2c 
-        (str p)
-        (when str (print p)))))
-
 (defvar MPU_6050 #x68)
 
 (defvar PWR_MGMT #x6B)
@@ -15,6 +9,9 @@
 
 (defvar GYRO_REGISTER #x43)
 (defvar GYRO_SCALE 131)
+
+(defvar dt 20)
+(defvar time 0.0)
 
 ; Write the register we want to read from
 (defun set-i2c-register (address byte)
@@ -74,8 +71,13 @@
 (defun main () 
     (wake-up-mpu)
     (loop
-        (print-format (read-accel))
-        (delay 1000)))
+        (setq time (+ time (/ dt 1000)))
+        (let ((accel (read-accel)))
+            (print-format 
+                (list 
+                    time
+                    (angle (get-y accel) (get-z accel)) ; angle
+                    (get-x (read-gyro)))))) ; gryo rotation amount
+        (delay dt))
 
-; (let ((accel (read-accel)))
-;     (print (angle (get-y accel) (get-z accel))))
+(main)
