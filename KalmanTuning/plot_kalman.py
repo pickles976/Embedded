@@ -15,8 +15,8 @@ def get_angle_from_angular(df: pd.DataFrame, dt: float = 0.003):
 
     return cumulative
 
-df = pd.read_csv("./readings.csv")
-df["angle"] = get_angle_from_angular(df=df)
+df = pd.read_csv("./kalman.csv")
+df["angle"] = get_angle_from_angular(df=df, dt=0.02)
 
 print(df)
 print(df.mean())
@@ -30,7 +30,7 @@ plt.figure(figsize=(10, 6))
 plt.figure(figsize=(10, 6))
 plt.plot(df['t'], df['accel_raw'], label='Accel Raw')
 # plt.plot(df['t'], df['gyro_raw'], label='Gyro Raw', linestyle='dashed')
-# plt.plot(df['t'], df['angle'], label='Gyro Angle', linestyle='dashed')
+plt.plot(df['t'], df['angle'], label='Gyro Angle', linestyle='dashed')
 plt.plot(df['t'], df['kalman_angle'], label='Kalman Angle')
 
 # Add labels and title

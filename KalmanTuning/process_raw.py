@@ -1,7 +1,6 @@
 import pandas as pd
 
-df = pd.read_csv("./accel.csv")
-df["acc_angle"] *= 180 / 3.14159265
+df = pd.read_csv("./readings.csv")
 
 print(df)
 print("MEAN:")
